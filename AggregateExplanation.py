@@ -52,7 +52,6 @@ class AggregateExplanation:
         
         for firstExplainer in self.explanationMethods:
             for secondExplainer in self.explanationMethods:
-                print(firstExplainer, secondExplainer)
                 explainerConfidences[firstExplainer] += self.caseAlignments[firstExplainer][secondExplainer]
 
                 if(not firstExplainer == secondExplainer):
