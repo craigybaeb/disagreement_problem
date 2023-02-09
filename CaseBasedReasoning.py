@@ -1,6 +1,7 @@
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
+import numpy as np
 
 #Contain the case-base within a class
 class CBR:
