@@ -1,3 +1,7 @@
+from sklearn.neighbors import NearestNeighbors
+from sklearn.preprocessing import OneHotEncoder
+import pandas as pd
+
 #Contain the case-base within a class
 class CBR:
   #Initialise the case-base data and k-NN model
