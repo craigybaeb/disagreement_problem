@@ -3,8 +3,9 @@ import pickle
 from tqdm import tqdm
 
 class CaseAlignment:
-    def __init__(self):
+    def __init__(self, num_neighbours):
         self.caseAlignments = {}
+        self.num_neighbours = num_neighbours
 
     #Get the distance between a query and case in the neighbourhood space
     def getDistance(self, query, neighbourCase, cbr):
@@ -54,7 +55,7 @@ class CaseAlignment:
         weighted_problem_distance_total = 0 #Numerator
         problem_distance_total = 0 #Denominator
 
-        cases = cbr_a1.retrieve(cbr_a1.inputDict[query], NUM_NEIGHBOURS + 1)[1:] 
+        cases = cbr_a1.retrieve(cbr_a1.inputDict[query], self.num_neighbors + 1)[1:] 
 
         if(show_progress):
             cases = tqdm(cases)
