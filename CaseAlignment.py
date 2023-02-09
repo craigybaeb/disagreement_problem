@@ -55,7 +55,7 @@ class CaseAlignment:
         weighted_problem_distance_total = 0 #Numerator
         problem_distance_total = 0 #Denominator
 
-        cases = cbr_a1.retrieve(cbr_a1.inputDict[query], self.num_neighbors + 1)[1:] 
+        cases = cbr_a1.retrieve(cbr_a1.inputDict[query], self.num_neighbours + 1)[1:] 
 
         if(show_progress):
             cases = tqdm(cases)
