@@ -107,7 +107,7 @@ class FeatureAgreement:
     #A2: Second attribution set
     #F: Features of interest
     def rank_correlation(self,A1,A2,F):
-        if(F == 0):
+        if(len(F) == 0):
             raise Exception('Error: Must include at least one feature.')
 
         RANKING_A1 = np.array(A1)[F] #Get only features of interest for first attribution method
@@ -122,7 +122,7 @@ class FeatureAgreement:
     #A2: Second attribution set
     #F: Features of interest
     def pairwise_rank_agreement(self,A1, A2, F):
-        if(F == 0):
+        if(len(F) == 0):
             raise Exception('Error: Must include at least one feature.')
 
         A1_RANKED = rankdata(A1)[F] #Get only features of interest for first attribution method
