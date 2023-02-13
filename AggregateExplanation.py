@@ -29,19 +29,38 @@ class AggregateExplanation:
         RANKED = sorted(range(len(attributions)), key = lambda sub: abs(attributions[sub]))
         return RANKED
 
-    def getAggregateExplanation(self):
-        WEIGHTED_EXPLAINERS = list(map(lambda explainer: self.importances[explainer] * self.explainerConfidences[explainer], self.explanationMethods))
+    def getAggregateExplanation(self, mode='median'): 
+        if(mode == 'median'):
+            WEIGHTED_EXPLAINERS = list(map(lambda explainer: self.importances[explainer] * self.explainerConfidences[explainer], self.explanationMethods))
 
-        #Gets median ranks for each column in a vector of feature attributions
-        medianRanks = []
-        for attribution in range(len(self.importances[next(iter(self.importances))])):
-            WEIGHTED_EXPLAINER_COLUMNS = list(map(lambda weightedExplainer: weightedExplainer[attribution], WEIGHTED_EXPLAINERS))
-            MEDIAN_RANK = np.median(WEIGHTED_EXPLAINER_COLUMNS)
-            medianRanks.append(MEDIAN_RANK)
+            #Gets median ranks for each column in a vector of feature attributions
+            medianRanks = []
+            for attribution in range(len(self.importances[next(iter(self.importances))])):
+                WEIGHTED_EXPLAINER_COLUMNS = list(map(lambda weightedExplainer: weightedExplainer[attribution], WEIGHTED_EXPLAINERS))
+                MEDIAN_RANK = np.median(WEIGHTED_EXPLAINER_COLUMNS)
+                medianRanks.append(MEDIAN_RANK)
 
-        #Re-ranks the features by order of importance
-        self.aggregateExplanation = self.rank(medianRanks)
+            #Re-ranks the features by order of importance
+            self.aggregateExplanation = self.rank(medianRanks)
+        elif(mode == 'weighted_average'):
+            #Gets weighted average ranks for each column in a vector of feature attributions
+            averageRanks = []
+            for attribution in range(len(self.importances[next(iter(self.importances))])):
+                EXPLAINER_COLUMNS = list(map(lambda explainer: self.importances[explainer][attribution], self.explanationMethods))
+                
+                weightedExplanationSum = 0
+                weightSum = 0
+                for explainer in self.explanationMethods:
+                    weightedExplanationSum += (self.importances[explainer][attribution] * self.explainerConfidences[explainer])
+                    weightSum += self.explainerConfidences[explainer]
+                
+                WEIGHTED_AVERAGE = weightedExplanationSum / weightSum
+                averageRanks.append(WEIGHTED_AVERAGE)
 
+            #Re-ranks the features by order of importance
+            self.aggregateExplanation = self.rank(averageRanks)
+        else:
+            raise Exception('Invalid mode received. Choose between median or weighted_average.')
         return
 
     def calculateExplainerConfidence(self):
@@ -64,5 +83,3 @@ class AggregateExplanation:
     def calculateTotalConfidence(self):
         self.confidence = sum(self.explainerConfidences.values()) / len(self.explanationMethods)
         return
-
-    
