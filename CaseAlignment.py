@@ -18,26 +18,18 @@ class CaseAlignment:
         
         return DISTANCE
 
-    #Get the max distance in the neighbourhood space
-    def getMaxDistance(self, query, cbr):
+    #Get the max and min distances in the neighbourhood space
+    def getMaxMinDistances(self, query, cbr):
         NEIGHBOURS = cbr.retrieve(query, len(cbr.data)).reshape(len(cbr.data),2)
         NEIGHBOURS_WITHOUT_SELF = NEIGHBOURS[1:]
         MAX_DISTANCE = max(NEIGHBOURS_WITHOUT_SELF[:,1])
-
-        return MAX_DISTANCE
-
-    #Get the minimum distance in the neighbourhood space
-    def getMinDistance(self, query, cbr):
-        NEIGHBOURS = cbr.retrieve(query, len(cbr.data)).reshape(len(cbr.data),2)
-        NEIGHBOURS_WITHOUT_SELF = NEIGHBOURS[1:]
         MIN_DISTANCE = min(NEIGHBOURS_WITHOUT_SELF[:,1])
 
-        return MIN_DISTANCE
+        return MAX_DISTANCE, MIN_DISTANCE
 
     #Get the alignment score for an attribution method
     def alignmentScore(self, query, neighbourCase, cbr):
-        MAX_DISTANCE = self.getMaxDistance(query, cbr)
-        MIN_DISTANCE = self.getMinDistance(query, cbr)
+        MAX_DISTANCE, MIN_DISTANCE = self.getMaxMinDistances(query, cbr)
 
         if(np.array_equal(query, neighbourCase)):
             MIN_DISTANCE = 0
