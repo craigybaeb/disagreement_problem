@@ -10,17 +10,15 @@ class CaseAlignment:
     #Get the distance between a query and case in the neighbourhood space
     def getDistance(self, query, neighbourCase, cbr):
         NEIGHBOURS = np.squeeze(cbr.retrieve(query, cbr.inputDict[query], len(cbr.data)))
-        NEIGHBOURS_WITHOUT_SELF = NEIGHBOURS[1:] #Exclude self from calculation
-        DISTANCE = NEIGHBOURS_WITHOUT_SELF[NEIGHBOURS_WITHOUT_SELF[:,0] == self.findKey(cbr.inputDict, neighbourCase)][0][1]
+        DISTANCE = NEIGHBOURS[NEIGHBOURS[:,0] == neighbourCase][0][1]
         
         return DISTANCE
 
     #Get the max and min distances in the neighbourhood space
     def getMaxMinDistances(self, query, cbr):
         NEIGHBOURS = cbr.retrieve(query, cbr.inputDict[query], len(cbr.data)).squeeze()
-        NEIGHBOURS_WITHOUT_SELF = NEIGHBOURS[1:]
-        MAX_DISTANCE = max(NEIGHBOURS_WITHOUT_SELF[:,1])
-        MIN_DISTANCE = min(NEIGHBOURS_WITHOUT_SELF[:,1])
+        MAX_DISTANCE = max(NEIGHBOURS[:,1])
+        MIN_DISTANCE = min(NEIGHBOURS[:,1])
 
         return MAX_DISTANCE, MIN_DISTANCE
 
