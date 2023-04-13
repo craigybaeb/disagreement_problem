@@ -172,11 +172,8 @@ class FeatureAgreement:
                
                 agreementTotal += agreement
         else:
-            for sample in range(len(data_prob)):
-                if(np.array_equal(data_prob, data_sol)):
-                    agreement = 1
-                else:
-                    agreement = agreementMethod(data_prob[sample], data_sol[sample], k)
+            for sample in range(len(data_prob) - 1):
+                agreement = agreementMethod(data_prob[sample], data_sol[sample], k)
                 agreementTotal += agreement
         
-        return agreementTotal / len(data_prob)
+        return agreementTotal / (len(data_prob) - 1)
