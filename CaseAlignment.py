@@ -46,8 +46,8 @@ class CaseAlignment:
         for neighbourCase in cases:
             CASE = neighbourCase[:, 0][0]
 
-            DISTANCE = self.getDistance(cbr_a1.inputDict[query], cbr_a1.inputDict[CASE], cbr_a1)
-            ALIGNMENT = self.alignmentScore(cbr_a2.inputDict[query], cbr_a2.inputDict[CASE], cbr_a2)
+            DISTANCE = self.getDistance(query, CASE, cbr_a1)
+            ALIGNMENT = self.alignmentScore(query, CASE, cbr_a2)
             WEIGHTED_PROBLEM_DISTANCE = (1 - DISTANCE) * ALIGNMENT
             PROBLEM_SIMILARITY = 1 - DISTANCE
 
