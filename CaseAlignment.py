@@ -56,11 +56,13 @@ class CaseAlignment:
         for neighbourCase in cases:
             CASE = neighbourCase[:, 0][0]
 
-            WEIGHTED_PROBLEM_DISTANCE = (1 - self.getDistance(cbr_a1.inputDict[query], cbr_a1.inputDict[CASE], cbr_a1)) * self.alignmentScore(cbr_a2.inputDict[query], cbr_a2.inputDict[CASE], cbr_a2) #Weight by alignment of comparison attribution method
-            PROBLEM_DISTANCE = 1 - self.getDistance(cbr_a1.inputDict[query], cbr_a1.inputDict[CASE], cbr_a1)
+            DISTANCE = self.getDistance(cbr_a1.inputDict[query], cbr_a1.inputDict[CASE], cbr_a1)
+            ALIGNMENT = self.alignmentScore(cbr_a2.inputDict[query], cbr_a2.inputDict[CASE], cbr_a2)
+            WEIGHTED_PROBLEM_DISTANCE = (1 - DISTANCE) * ALIGNMENT
+            PROBLEM_SIMILARITY = 1 - DISTANCE
 
             weighted_problem_distance_total += WEIGHTED_PROBLEM_DISTANCE
-            problem_distance_total += PROBLEM_DISTANCE
+            problem_distance_total += PROBLEM_SIMILARITY
 
         CASE_ALIGNMENT = weighted_problem_distance_total / problem_distance_total
         return CASE_ALIGNMENT

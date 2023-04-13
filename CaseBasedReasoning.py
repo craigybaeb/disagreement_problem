@@ -21,6 +21,7 @@ class CBR:
 
   #Read the data from the CSV file into a Pandas dataframe
   def load_data(self, categorical, filepath='', raw_data=[]):
+    data = []
     if(len(raw_data) > 0):
       return raw_data
     else: 
@@ -37,6 +38,16 @@ class CBR:
     NEIGHBOURS_AND_DISTANCES = self.model.kneighbors(index.reshape(1,-1), n_neighbors=round(num_neighbours * self.limit), return_distance=True)
     DISTANCES = NEIGHBOURS_AND_DISTANCES[0]
     NEIGHBOURS = NEIGHBOURS_AND_DISTANCES[1]
+
+    NEIGHBOURS_WITHOUT_SELF = []
+    DISTANCES_WITHOUT_SELF = []
+    for n,d in zip(NEIGHBOURS[0], DISTANCES[0]):
+        if n != index:
+            NEIGHBOURS_WITHOUT_SELF.append(n)
+            DISTANCES_WITHOUT_SELF.append(d)
+
+    NEIGHBOURS_WITHOUT_SELF = [NEIGHBOURS_WITHOUT_SELF]
+    DISTANCES_WITHOUT_SELF = [DISTANCES_WITHOUT_SELF]
 
     #Convert the neighbour-distances 2-D array into a 1D array of tuples
     # e.g (neighbour, distance)
