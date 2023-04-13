@@ -34,11 +34,12 @@ class CBR:
     return transformed
 
   #Retrieve the neighbours for a query along with its distance
-  def retrieve(self, index, num_neighbours):
-    NEIGHBOURS_AND_DISTANCES = self.model.kneighbors(index.reshape(1,-1), n_neighbors=round(num_neighbours * self.limit), return_distance=True)
+  def retrieve(self, index, query, num_neighbours):
+    NEIGHBOURS_AND_DISTANCES = self.model.kneighbors(query.reshape(1,-1), n_neighbors=round(num_neighbours * self.limit), return_distance=True)
     DISTANCES = NEIGHBOURS_AND_DISTANCES[0]
     NEIGHBOURS = NEIGHBOURS_AND_DISTANCES[1]
 
+    #Remove self from retrieval
     NEIGHBOURS_WITHOUT_SELF = []
     DISTANCES_WITHOUT_SELF = []
     for n,d in zip(NEIGHBOURS[0], DISTANCES[0]):

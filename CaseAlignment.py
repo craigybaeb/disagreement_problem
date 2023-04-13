@@ -9,10 +9,7 @@ class CaseAlignment:
 
     #Get the distance between a query and case in the neighbourhood space
     def getDistance(self, query, neighbourCase, cbr):
-        if(np.array_equal(query,neighbourCase)):
-            return 0
-            
-        NEIGHBOURS = np.squeeze(cbr.retrieve(query, len(cbr.data)))
+        NEIGHBOURS = np.squeeze(cbr.retrieve(query, cbr.inputDict[query], len(cbr.data)))
         NEIGHBOURS_WITHOUT_SELF = NEIGHBOURS[1:] #Exclude self from calculation
         DISTANCE = NEIGHBOURS_WITHOUT_SELF[NEIGHBOURS_WITHOUT_SELF[:,0] == self.findKey(cbr.inputDict, neighbourCase)][0][1]
         
@@ -20,7 +17,7 @@ class CaseAlignment:
 
     #Get the max and min distances in the neighbourhood space
     def getMaxMinDistances(self, query, cbr):
-        NEIGHBOURS = cbr.retrieve(query, len(cbr.data)).reshape(len(cbr.data),2)
+        NEIGHBOURS = cbr.retrieve(query, cbr.inputDict[query], len(cbr.data)).squeeze()
         NEIGHBOURS_WITHOUT_SELF = NEIGHBOURS[1:]
         MAX_DISTANCE = max(NEIGHBOURS_WITHOUT_SELF[:,1])
         MIN_DISTANCE = min(NEIGHBOURS_WITHOUT_SELF[:,1])
@@ -30,11 +27,6 @@ class CaseAlignment:
     #Get the alignment score for an attribution method
     def alignmentScore(self, query, neighbourCase, cbr):
         MAX_DISTANCE, MIN_DISTANCE = self.getMaxMinDistances(query, cbr)
-
-        if(np.array_equal(query, neighbourCase)):
-            MIN_DISTANCE = 0
-            
-            
         CASE_DISTANCE = self.getDistance(query, neighbourCase, cbr)
 
         #Normalised alignment
@@ -47,7 +39,7 @@ class CaseAlignment:
         weighted_problem_distance_total = 0 #Numerator
         problem_distance_total = 0 #Denominator
 
-        cases = cbr_a1.retrieve(cbr_a1.inputDict[query], self.num_neighbours + 1)[1:] 
+        cases = cbr_a1.retrieve(query, cbr_a1.inputDict[query], self.num_neighbours + 1)[1:] 
 
         if(show_progress):
             cases = tqdm(cases)
